@@ -180,7 +180,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.0.0)
     raindrops (0.13.0)
-    rake (10.4.2)
+    rake (13.0.1)
     rdoc (4.2.0)
       json (~> 1.4)
     reek (1.6.0)
