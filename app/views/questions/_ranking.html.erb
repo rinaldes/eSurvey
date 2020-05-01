@@ -1,0 +1,10 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% question["varians"]["option"].each do |id, option| %>
+	<div class="form-group">
+		<div class="ranking-value">
+			<%= select_tag "response[#{question['id']}][ranking][#{option['label']}]", options_for_select((question["varians"]["ranking"]["min"].to_i..question["varians"]["ranking"]["max"].to_i).map { |value| value }, current_response[question['id'].to_s].present? ? current_response[question['id'].to_s]['ranking'][option['label']] : (question["answer"].present? ? question["answer"] : question["varians"]["ranking"]["min"].to_i)), disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false), class: "form-control" %>
+		</div>
+		<%= label_tag "response[#{question['id']}][ranking][#{option['label']}]", option['label'] %>
+	</div>
+<% end %>

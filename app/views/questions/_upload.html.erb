@@ -1,0 +1,34 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<%#= question %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size has-upload">
+	<div class="fileUpload btn btn-primary <%= 'disabled' if disabled %>">
+    <span><%= question['varians']['label'] %></span>
+		<input type="file" placeholder="<%= question['varians']['label'] %>" class="upload" <%= "disabled" if disabled %> value="<%= question['answer'] %>" <%= "required" if question['required'].to_i==1 %> name="response[<%= question['id'] %>][upload]" id="response_<%= question['id'] %>_upload">
+	</div>
+	<span id="response_<%= question['id'] %>_upload_text">Choose File</span>
+</div>
+
+<script type="text/javascript">
+	document.getElementById("response_<%= question['id'] %>_upload").onchange = function () {
+		if (this.value == "") {
+	  	this_value = "Choose File";
+		} else{
+	  	this_value = "..."+this.value.substr(this.value.length - 20);
+		};
+    document.getElementById("response_<%= question['id'] %>_upload_text").innerHTML = this_value;
+	};
+</script>

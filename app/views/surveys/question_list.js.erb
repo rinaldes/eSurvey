@@ -1,0 +1,4 @@
+$("#add_question_page").append("<div class=\"clearfix has-button\"><div class=\"col-sm-6\"><%= j(select_tag 'pages[questions][]', options_for_select(@options ,'-'), :prompt => 'Select question...', :class => 'form-control') %></div></div>")
+$('html, body').animate({
+  scrollTop: $("#set-page-form").offset().top
+}, 2000);

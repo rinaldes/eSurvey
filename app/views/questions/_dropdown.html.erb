@@ -1,0 +1,18 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+	<% options = question['varians']['options'].present? ? question['varians']['options'].split("\r\n") : {} %>
+	<%= select_tag "response[#{question['id']}][dropdown]", options_for_select(options, current_response[question['id'].to_s].present? ? current_response[question['id'].to_s]['dropdown'] : (question['answer'].present? ? question['answer'] : options[0])), :prompt => "Select one...", :class => "form-control", :readonly => (disabled ? true : false), :required => (question['required'].to_i==1 ? true : false) %>
+</div>

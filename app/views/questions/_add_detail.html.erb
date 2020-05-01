@@ -1,0 +1,37 @@
+<div class="advance panel box">
+  <div class="advance-heading">
+    <span class="tools">
+      <a href="javascript:;" class="fa fa-plus-square"></a>
+    </span>
+    List Questions
+  </div>
+
+  <div id="add_question_logical" class="advance-body" style="display: none;">
+    <div class="clearfix has-button">
+      <div class="col-sm-6">
+        <%= link_to "Add New +", "#", id: "add_new_question_button", class: "btn btn-primary pull-right", onclick: "get_question_lists()" %>
+      </div>
+    </div>
+
+    <div class="form-group has-button">
+      <%= label_tag "logical[answer]", "Answer", class: "col-sm-2 control-label" %>
+      <div class="col-sm-6">
+        <%= select_tag "logical[answer]", options_for_select([] ,'-'), :prompt => "Select answer...", :class => "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "logical[survey_page_id]", "Page", class: "col-sm-2 control-label" %>
+      <div class="col-sm-6">
+        <%= select_tag "logical[survey_page_id]", options_for_select([] ,'-'), :prompt => "Select page...", :class => "form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "logical[survey_question_id]", "Answer", class: "col-sm-2 control-label" %>
+      <div class="col-sm-6">
+        <%= select_tag "logical[survey_question_id]", options_for_select([] ,'-'), :prompt => "Select question...", :class => "form-control" %>
+      </div>
+    </div>
+  </div>
+</div>

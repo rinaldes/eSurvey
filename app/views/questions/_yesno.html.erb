@@ -1,0 +1,24 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+	<div class='iradio_minimal radio col-sm-2'>
+		<%= radio_button_tag "response[#{question['id']}][yesno]", "yes", current_response[question['id'].to_s].present? ? (current_response[question['id'].to_s]['yesno']=="yes" ? true : false) : false, disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false) %>
+		<%= label_tag "response_#{question['id']}_yesno_yes", "Yes" %>
+	</div>
+	<div class='iradio_minimal radio col-sm-2'>
+		<%= radio_button_tag "response[#{question['id']}][yesno]", "no", current_response[question['id'].to_s].present? ? (current_response[question['id'].to_s]['yesno']=="no" ? true : false) : false, disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false) %>
+		<%= label_tag "response_#{question['id']}_yesno_no", "No" %>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group clearfix half-size">	
+	<% question['varians']['option'].each do |index, option| %>
+		<div class="checkbox reset-width">
+			<%
+				if index.downcase=='other'
+					index_name = index
+				else
+					index_name = option['label']
+				end
+			%>
+
+			<%= check_box_tag "response[#{question['id']}][checkbox][#{index_name}]", 1, current_response[question['id'].to_s].present? ? current_response[question['id'].to_s]['checkbox'][index_name] : false, disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false), style: "margin-top:10px;" %>
+			<%= label_tag "response_"+question['id'].to_s+"_checkbox_"+index_name.to_s, option["label"] %>
+			
+			<% if index.downcase=='other' %>
+				<div class="col-sm-5 input-other">
+					<%= text_field_tag "response[#{question['id']}][checkbox][#{index_name}_text]", current_response[question['id'].to_s].present? ? current_response[question['id'].to_s]['checkbox'][index_name + "_text"] : "", class: "form-control", disabled: (disabled ? true : false), placeholder: "Your question" %>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
+</div>

@@ -1,0 +1,2 @@
+$("#survey_<%= @survey.id %>").replaceWith("<%= j(render (@cancel=='true' ? 'survey' : 'edit'), survey: @survey ) %>")
+initialize_date_range('.dpd12', '.dpd22')

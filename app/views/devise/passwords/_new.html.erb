@@ -1,0 +1,23 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+  	<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }, remote: true) do |f| %>
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	      <h4 class="modal-title">Forgot Password ?</h4>
+	    </div>
+	    <div class="modal-body">
+  			<%= devise_error_messages! %>
+	      <p>Enter your e-mail address and username below to reset your password.</p>
+	      <%= f.text_field :username, autocomplete: "off", class: "form-control placeholder-no-fix", placeholder: "Username" %>
+	      <%= f.email_field :email, autocomplete: "off", class: "form-control placeholder-no-fix", placeholder: "Email" %>
+
+	    </div>
+	    <div class="modal-footer">
+	    	<%= button_tag "Cancel", :"data-dismiss" => "modal", class: "btn btn-default", type: "button" %>
+	    	<%= button_tag "Submit", class: "btn btn-success", type: "submit" %>
+	    </div>
+	  <% end %>
+  </div>
+</div>
+
+<%#= render "devise/shared/links" %>

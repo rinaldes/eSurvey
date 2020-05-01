@@ -1,0 +1,17 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+	<textarea name="response[<%= question['id'] %>][paragraph_text]" class="form-control" <%= "disabled" if disabled %> <%= "required" if question["required"].to_i==1 %> <%= "min=#{question['varians']['number']}".html_safe if question['varians']['validate'].present? && question['varians']['type'] == "minimum" %> <%= "max=#{question['varians']['number']}".html_safe if question['varians']['validate'].present? && question['varians']['type'] == "maximum" %> placeholder="Your question"><%= current_response[question['id'].to_s]['paragraph_text'] if current_response[question['id'].to_s].present? %></textarea>
+</div>

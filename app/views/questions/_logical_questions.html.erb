@@ -1,0 +1,19 @@
+<% questions = session[current_user.id.to_s]["question"] %>
+<% pages = session[current_user.id.to_s]["pages"] %>
+
+<div class="logical-preview-detail">
+	<div class="form-group">
+		<label class="control-label col-sm-2">Answer</label>
+		<label class="control-label col-sm-8"><%= question["varians"]["options"][varians["answer"]]["label"] %></label>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-sm-2">Page</label>
+		<label class="control-label col-sm-8"><%= pages[varians["page"].to_i]["title"] %></label>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-sm-2">Question</label>
+		<label class="control-label col-sm-8"><%= questions[varians["question"].to_i]["title"] %></label>
+	</div>
+</div>

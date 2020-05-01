@@ -1,0 +1,13 @@
+<div class="form-group <%= index.to_i==0 ? 'master-item' : 'index-item' %>" id="radio_button_other_group">
+	<div class="col-sm-1 col-sm-offset-2 checkbox reset-width">
+		<%= radio_button_tag "question[answer]", "other", current_value.present? ? (current_value['answer'] == "other" ? true : false) : false  %> Other:
+	</div>
+	<div class="col-sm-5 fix-width">
+		<%= text_field_tag "question[varians][options][other][label]", current_value.present? ? (current_value['varians']['options']['other'].present? ? current_value['varians']['options']['other']['label'] : "") : "", class: "form-control", placeholder: "Other option" %>
+	</div>
+	<div class="col-sm-2">
+		<button class="btn btn-primary" type="button" onclick="remove_row(<%= id %>, <%= index %>, 'radio_button_other');">
+			<i class='fa fa-minus'></i>
+		</button>
+	</div>
+</div>

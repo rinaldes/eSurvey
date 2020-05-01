@@ -1,0 +1,18 @@
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "form-signin" }) do |f| %>
+  <h2 class="form-signin-heading">Change your password</h2>
+  <div class="login-wrap">
+    <%= devise_error_messages! %>
+    <div class="user-login-info">
+      <%= f.hidden_field :reset_password_token %>
+      <%= f.password_field :password, autofocus: true, autocomplete: "off", class: "form-control", placeholder: "New password" %>
+      <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Confirm new password" %>
+    </div>
+    <%= button_tag "Change my password", class: "btn btn-lg btn-login btn-block", type: "submit" %>
+
+    <div class="registration">
+      Already remember your password?.
+      <%= link_to "Login", new_user_session_path %>
+    </div>
+
+  </div>
+<% end %>

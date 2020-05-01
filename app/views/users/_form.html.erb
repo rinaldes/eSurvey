@@ -1,0 +1,131 @@
+<%
+  unless @user.id.present?
+    url = add_user_path
+    method = :post
+  else
+    url = user_path(@user)
+    method = :put
+  end
+%>
+<%= form_for(@user, url: url, html: {class: "form-horizontal", role: "form", method: method, multipart: true}, remote: true) do |f| %>
+  <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title"><%= form_title %></h4>
+  </div>
+
+  <div class="modal-body">
+    <% if @user.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+        <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :first_name, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_field :first_name, autocomplete: "off", class: "form-control", placeholder: "First name" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :last_name, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_field :last_name, autocomplete: "off", class: "form-control", placeholder: "Last name" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :image, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.file_field :image, autocomplete: "off", class: "form-control", placeholder: "Upload your image" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :gender, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <div class="radios">
+          <%= f.label :gender_male, class: "label_radio col-lg-6 col-sm-6" do %>
+            <%= f.radio_button :gender, "male", :checked => (true if f.object.gender == "male") %> Male
+          <% end %>
+          <%= f.label :gender_female, class: "label_radio col-lg-6 col-sm-6" do %>
+            <%= f.radio_button :gender, "female", :checked => (true if f.object.gender == "female") %> Female
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :birth_place, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_field :birth_place, autocomplete: "off", class: "form-control", placeholder: "Birth place" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :birth_date, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <div data-date-viewmode="years" data-date-format="dd-mm-yyyy" data-date="01-01-1970" class="input-group date dpYears">
+          <%= f.text_field :birth_date, autofocus: true, placeholder: "Birth Date", class: "form-control", readonly: "" %>
+          <span class="input-group-btn add-on">
+            <%= button_tag class: "btn btn-primary", type: "button" do %>
+              <i class="fa fa-calendar"></i>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :username, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.text_field :username, autocomplete: "off", class: "form-control", placeholder: "Username" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :email, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.email_field :email, autocomplete: "off", class: "form-control", placeholder: "Email" %>
+      </div>
+    </div>
+
+    <% unless f.object.id.present? %>
+      <div class="form-group">
+        <%= f.label :password, class: "col-lg-2 col-sm-2 control-label" %>
+        <div class="col-lg-10">
+          <%= f.password_field :password, placeholder: "Password", class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, class: "col-lg-2 col-sm-2 control-label" %>
+        <div class="col-lg-10">
+          <%= f.password_field :password_confirmation, placeholder: "Re-type Password", class: "form-control" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :role, class: "col-lg-2 col-sm-2 control-label" %>
+      <div class="col-lg-10">
+        <%= f.select :role, options_for_select([['Responder', 'responder'], ['Admin', 'admin']], f.object.role), {}, autofocus: true, placeholder: "Role", class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <%= button_tag "Submit", class: "btn btn-success", type: "submit" %>
+    <%= button_tag "Cancel", :"data-dismiss" => "modal", class: "btn btn-default", type: "button" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $('.dpYears').datepicker();
+</script>

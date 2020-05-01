@@ -1,0 +1,44 @@
+<!--header start-->
+<header class="header fixed-top clearfix">
+  <!--logo start-->
+  <div class="brand">
+    <%= link_to (image_tag "logo.png", title: "eSurvey"), root_path, class: "logo" %>
+    <div class="sidebar-toggle-box">
+      <div class="fa fa-bars"></div>
+    </div>
+  </div>
+  <!--logo end-->
+
+  <div class="top-nav clearfix">
+    <!--search & user info start-->
+    <ul class="nav pull-right top-menu">
+      <li>
+        <!-- <input type="text" class="form-control search" placeholder=" Search"> -->
+      </li>
+      <!-- user login dropdown start-->
+      <li class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+          <!-- <img alt="" src="/assets/avatar1_small.jpg"> -->
+          <img alt="" src="<%= current_user.image_url(:mini) if current_user.image? %>" onerror="this.src='/assets/default-user.png'">
+          <span class="username"><%= current_user.name %></span>
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu extended logout">
+          <li>
+            <%= link_to profile_path do %>
+              <i class="fa fa-user"></i>Profile
+            <% end %>
+          </li>
+          <li>
+            <%= link_to destroy_user_session_path, method: :delete do %>
+              <i class="fa fa-key"></i> Log Out
+            <% end %>
+          </li>
+        </ul>
+      </li>
+      <!-- user login dropdown end -->
+    </ul>
+    <!--search & user info end-->
+  </div>
+</header>
+<!--header end-->

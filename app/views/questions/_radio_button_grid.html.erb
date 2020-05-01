@@ -1,0 +1,61 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% weighting = ["--", "-", "+", "++"] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<table class="grid-table">
+	<thead>
+		<td></td>
+		<% question["varians"]["option"]["column"].each do |id, column| %>
+			<td><%= column["label"] %></td>
+		<% end %>
+		<% if question["varians"]["weighting"].to_i == 1  %>
+			<td class="weighting">
+				<table>
+					<thead>
+					<% weighting.each do |weight| %>
+						<td><%= weight %></td>
+					<% end %>
+					</thead>
+				</table>
+			</td>
+		<% end %>
+	</thead>
+	<tbody>
+		<% question["varians"]["option"]["row"].each do |row_id, row| %>
+			<tr>
+				<td><%= row["label"] %></td>
+				<% question["varians"]["option"]["column"].each do |col_id, column| %>
+					<td>
+						<%= radio_button_tag "response[#{question['id']}][radio_button_grid][#{row_id}][answer]", col_id, current_response[question['id'].to_s].present? ? (current_response[question['id'].to_s]['radio_button_grid'][row_id]['answer']==col_id ? true : false ) : false, required: (question["required"].to_i==1 ? true : false) %>
+					</td>
+				<% end %>
+
+				<% if question["varians"]["weighting"].to_i == 1  %>
+					<td class="weighting">
+						<table>
+							<tbody>
+								<% weighting.each_with_index do |index, weight| %>
+									<td>
+										<%= radio_button_tag "response[#{question['id']}][radio_button_grid][#{row_id}][weighting]", index, current_response[question['id'].to_s].present? ? (current_response[question['id'].to_s]['radio_button_grid'][row_id]['weighting']==index ? true : false) : false, disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false) %>
+									</td>
+								<% end %>
+							</tbody>
+						</table>
+					</td>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

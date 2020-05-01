@@ -1,0 +1,16 @@
+<div class="form-group <%= index.to_i==0 ? 'master-item' : 'index-item' %>" id="textbox_grid_column_group_<%= index %>">
+	<div class="col-sm-5 col-sm-offset-2">
+		<%= text_field_tag "question[varians][option][column][#{index}][label]", current_value.present? ? current_value['varians']['option']['column'][index]['label'] : "", class: "form-control", placeholder: "Column #{index.to_i+1}" %>
+	</div>
+	<div class="col-sm-3">
+		<button class="btn btn-primary textbox_grid_column_button" type="button" onclick="add_row(<%= id %>, <%= index %>, 'textbox_grid_column')" style="<%= current_value.present? ? (current_value['varians']['option']['column'].count==index.to_i+1 ? '' : 'display:none') : '' %>">
+			<i class="fa fa-plus"></i>
+		</button>
+
+		<% unless index.to_i==0 %>
+			<button class="btn btn-primary" type="button" onclick="remove_row(<%= id %>, <%= index %>, 'textbox_grid_column');">
+				<i class='fa fa-minus'></i>
+			</button>
+		<% end %>
+	</div>
+</div>

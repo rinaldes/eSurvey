@@ -1,0 +1,38 @@
+<div class="col-sm-12">
+  <section class="panel">
+    <header class="panel-heading">
+      List Users
+    </header>
+    <div class="panel-body">
+      <div class="adv-table editable-table ">
+        <div class="clearfix">
+          <div class="btn-group">
+            <%= link_to new_user_path, id: "editable-sample_new", class: "btn btn-primary", remote: true do %>
+              Add New <i class="fa fa-plus"></i>
+            <% end %>
+          </div>
+          <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              <li><a href="#" onclick="javascript:print();">Print</a></li>
+              <li><%= link_to "Export to CSV", users_path(format: "csv") %></li>
+              <li><%= link_to "Export to Excel", users_path(format: "xls") %></li>
+            </ul>
+          </div>
+        </div>
+        <div class="space15"></div>
+
+        <%= render 'users', :users => @users %>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Modal -->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+  <%= render 'new' if @user.present? && action_name == "create" %>
+  <%= render 'edit' if @user.present? && action_name == "update" %>
+</div>
+<!-- modal -->

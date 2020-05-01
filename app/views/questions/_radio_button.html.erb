@@ -1,0 +1,35 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group clearfix half-size">
+	<% question['varians']['options'].each do |index, option| %>
+		<div class="checkbox reset-width">
+			<%
+				if index.downcase=='other'
+					index_name = index
+				else
+					index_name = option['label']
+				end
+			%>
+			<%= radio_button_tag "response[#{question['id']}][radio_button][answer]", index_name, current_response[question['id'].to_s].present? ? (current_response[question['id'].to_s]['radio_button']['answer']==index_name ? true : false) : false, disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false) %>
+			<%= label_tag "response[#{question['id']}][radio_button]_" + index_name, option["label"] %>
+			
+			<% if index.downcase=='other' %>
+				<div class="col-sm-5 input-other">
+					<%= text_field_tag "response[#{question['id']}][radio_button][#{index_name}]", current_response[question['id'].to_s].present? ? current_response[question['id'].to_s]['radio_button'][index_name] : "", class: "form-control", disabled: (disabled ? true : false) %>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
+</div>

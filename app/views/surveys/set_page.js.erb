@@ -1,0 +1,4 @@
+<% params[:is_background] = params[:is_background].present? ? params[:is_background].to_s : 'false' %>
+$("#set-<%= params[:is_background]=='true' ? 'background' : 'page' %>-form").html("")
+$("#close-<%= params[:is_background]=='true' ? 'background' : 'page' %>-link").addClass("hide")
+$("#<%= params[:is_background]=='true' ? 'background' : 'page' %>-preview").append("<%= j(render '/questions/page', page: params[:pages], id: params[:pages][:id], is_background: params[:is_background]) %>")

@@ -1,0 +1,21 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+	<div class="time-pick">
+		<div class="col-sm-6">
+			<input type="text" class="form-control time-pick-control timepicker-24 <%= question['varians']['include_duration'].to_i==1 ? 'time1' : 'time2' %>" placeholder="Time" name="response[<%= question['id'] %>][time]" <%= "disabled" if disabled %> <%= "required" if question["required"].to_i==1 %> value="<%= current_response[question['id'].to_s]['time'] if current_response[question['id'].to_s].present? %>">
+	  </div>
+  </div>
+</div>

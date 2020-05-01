@@ -1,0 +1,51 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+	<div class="range-date">
+		<% if question['varians']['include_to'].to_i==1 %>
+	    <%
+		    if question['varians']['include_year'].to_i==1 && question['varians']['include_time'].to_i==0
+		    	class_name = ["dpdyear1", "dpdyear2"]
+		    elsif question['varians']['include_year'].to_i==0 && question['varians']['include_time'].to_i==1
+		    	class_name = ["form_datetime", "form_datetime"]
+		    elsif question['varians']['include_year'].to_i==1 && question['varians']['include_time'].to_i==1
+		    	class_name = ["form_datetimeyear", "form_datetimeyear"]
+		    else
+		    	class_name = ["dpddefault1", "dpddefault2"]
+		    end
+	    %>
+			<div class="input-group input-large">
+				<input name="response[<%= question['id'] %>][date][date_start]" class="form-control range-date-control <%= class_name %>" placeholder="Start" <%= "disabled" if disabled %> <%= "required" if question["required"].to_i==1 %> value="<%= current_response[question['id'].to_s]['date']['date_start'] if current_response[question['id'].to_s].present? %>">
+	      <span class="input-group-addon">To</span>
+				<input name="response[<%= question['id'] %>][date][date_end]" class="form-control range-date-control" placeholder="End" <%= "disabled" if disabled %> <%= "required" if question["required"].to_i==1 %> value="<%= current_response[question['id'].to_s]['date']['date_end'] if current_response[question['id'].to_s].present? %>">
+	    </div>
+		<% else %>
+	    <%
+		    if question['varians']['include_year'].to_i==1 && question['varians']['include_time'].to_i==0
+		    	class_name = "singleyear"
+		    elsif question['varians']['include_year'].to_i==0 && question['varians']['include_time'].to_i==1
+		    	class_name = "singletime"
+		    elsif question['varians']['include_year'].to_i==1 && question['varians']['include_time'].to_i==1
+		    	class_name = "singletimeyear"
+		    else
+		    	class_name = "singledefault"
+		    end
+	    %>
+			<div class="col-sm-6">
+				<input name="response[<%= question['id'] %>][date]" class="form-control range-date-control <%= class_name %>" placeholder="Date" <%= "disabled" if disabled %> <%= "required" if question["required"].to_i==1 %> value="<%= current_response[question['id'].to_s]['date'] if current_response[question['id'].to_s].present? %>">
+	    </div>
+		<% end %>
+  </div>
+</div>

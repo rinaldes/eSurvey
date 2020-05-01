@@ -1,0 +1,17 @@
+<div class="set-preview col-sm-12" id="logical-preview-<%= id %>">
+	<div class="set-preview-header">
+		<span>
+			<%= link_to '', edit_logical_surveys_path(id: id), remote: true, :class => 'fa fa-pencil' %>
+			<%= link_to '', manage_logical_surveys_path(:remove, id: id), remote: true, :class => 'fa fa-trash-o' %>
+		</span>
+
+		<% question = session[current_user.id.to_s]["question"][id.to_i] %>
+    <%= question["title"] %>
+	</div>
+
+	<div class="set-preview-body logical-preview form-horizontal" id="logical_questions-<%= id %>">
+		<% logical['varians'].each do |id, varians| %>
+			<%= render "/questions/logical_questions", varians: varians, question: question %>
+		<% end %>
+	</div>
+</div>

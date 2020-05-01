@@ -1,0 +1,24 @@
+<% id ||= 0 %>
+<% current_value = session[current_user.id.to_s]['question'][id.to_i] %>
+<div class="form-group">
+	<%= label_tag "question[title]", "Header text", class: "col-sm-2 control-label" %>
+	<div class="col-sm-6">
+		<%= text_field_tag "question[title]", current_value.present? ? current_value['title'] : "", class: "form-control", placeholder: "Header text" %>
+	</div>
+</div>
+
+<div class="form-group">
+	<%= label_tag "question[help]", "Description", class: "col-sm-2 control-label" %>
+	<div class="col-sm-10">
+		<%= text_area_tag "question[help]", current_value.present? ? current_value['help'] : "", class: "form-control", placeholder: "Description" %>
+	</div>
+</div>
+
+<div class="extra panel box">
+	<div class="row">
+		<div class="col-sm-<%= id.to_i == 0 ? '1' : '2' %>" <%= "style=padding-right:0;" if id.to_i > 0 %>>
+			<%= button_tag "Done", type: "submit", class: "btn btn-primary" %>
+			<%= link_to "Cancel", edit_question_surveys_path(id: id, cancel: true), remote: true, class: "btn btn-primary" if id.to_i > 0 %>
+		</div>
+	</div>
+</div>

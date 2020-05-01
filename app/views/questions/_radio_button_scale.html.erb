@@ -1,0 +1,29 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<table class="grid-table">
+	<tbody>
+		<% question["varians"]["option"].each do |opt_id, option| %>
+			<tr>
+				<td><%= option["text_before"] %></td>
+				<% (0..question['varians']['increment'].to_i-1).each do |index|  %>
+					<td>
+						<%= radio_button_tag "response[#{question['id']}][radio_button_scale][#{opt_id}]", index, current_response[question['id'].to_s].present? ? (current_response[question['id'].to_s]['radio_button_scale'][opt_id]==index ? true : false) : false, disabled: (disabled ? true : false), required: (question["required"].to_i==1 ? true : false) %>
+					</td>
+				<% end %>
+				<td><%= option["text_after"] %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

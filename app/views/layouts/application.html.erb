@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="/assets/favicon.png">
+
+    <title>eSurvey</title>
+
+    <!--Core CSS -->
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+
+    <script data-turbolinks-track="true" src="/assets/jquery.js?body=1"></script>
+    
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="<%= 'login-body' unless user_signed_in? %>">
+
+      <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t(:language)%><b class="caret"></b></a>
+      <ul class="">
+        <li> <%= link_to "English", set_language_change_locale_url(locale: 'en'), 'data-no-turbolink' => true  %></li>
+        <li> <%= link_to "Indonesia", set_language_change_locale_url(locale: 'id'), 'data-no-turbolink' => true  %></li>
+     </ul> -->
+
+    <% if user_signed_in? %>
+      <section id="container">
+        <%= render "layouts/header" %>
+        <%= render "layouts/sidebar" %>
+
+        <!--main content start-->
+        <section id="main-content">
+          <section class="wrapper">
+          <!-- page start-->
+            <div class="row" style="<%= 'display:none;' unless flash.count.to_i > 0 %>">
+              <div class="col-md-12">
+                <div id="error_explanation-second">
+                  <%- flash.each do |name, msg| -%>
+                    <%= content_tag :h2, msg, id: "flash_#{name}", class: "flash_content" if msg.is_a?(String) %>
+                  <%- end -%> 
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <%= yield %>
+            </div>
+          <!-- page end-->
+          </section>
+        </section>
+        <!--main content end-->
+      </section>
+    <% else %>
+      <div class="container">
+        <%= yield %>
+      </div>
+    <% end %>
+
+   <!-- Placed js at the end of the document so the pages load faster -->
+
+   <!--Core js-->
+   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+    <script type="text/javascript">
+      setTimeout(function(){ $("#error_explanation-second").parent("div.col-md-12").parent("div.row").slideUp("slow") }, 5000);
+      
+      $('.dpYears').datepicker();
+
+      <% if user_signed_in? %>
+        var settings = {
+          headerTag: "h2",
+          bodyTag: "section",
+          transitionEffect: "slideLeft",
+
+          /* Events */
+          onStepChanged: function (event, currentIndex, priorIndex) {
+            $.ajax({
+              type:'GET',
+              url: "<%= reload_surveys_path %>",
+              success:function(data){
+                data
+              }
+            });
+          },
+          onFinishing: function (event, currentIndex) {
+            $("#new_survey_submit").prop('disabled', false)
+            $("#new_survey_submit").click()
+          }
+        };
+
+        $(function (){
+          $("#wizard").steps(settings);
+        });
+      <% end %>
+      
+      $("li.dropdown").click(function(){
+        $(this).toggleClass("open");
+      })
+      $("button.dropdown-toggle").click(function(){
+        $(this).parent("div").toggleClass("open");
+      })
+      
+      $(document).ajaxSend(function() {
+        if($(".ajax-feeds-loader").length == 0){
+          set_loader()
+        }
+      }).ajaxComplete(function() {
+        setTimeout(function(){$(".ajax-loader").remove();},1000);
+      });
+
+      function set_loader(){
+        $("body").append("<div class='ajax-loader'></div>")
+      }
+
+      <% if controller_name == "dashboard" %>
+        <% if @all_one_year_responses > 0 && @one_year_responses > 0 %>
+          if ($.fn.plot) {
+            // DONUT
+            var dataPie = [{
+              label: "Response",
+              data: <%= ((@one_year_responses.to_f/@all_one_year_responses.to_f)*100).ceil %>
+            }, {
+              label: "Unresponse",
+              data: <%= (((@all_one_year_responses-@one_year_responses).to_f/@all_one_year_responses.to_f)*100).floor %>
+            }];
+
+            $.plot($(".sm-pie"), dataPie, {
+              series: {
+                pie: {
+                  innerRadius: 0.6,
+                  show: true,
+                  stroke: {
+                    width: 0.1,
+                    color: '#ffffff'
+                  }
+                }
+              },
+
+              legend: {
+                show: true
+              },
+              grid: {
+                hoverable: true,
+                clickable: true
+              },
+
+              // colors: ["#ffdf7c", "#b2def7", "#efb3e6"]
+              colors: ["#efb3e6", "#b2def7"]
+            });
+          }
+        <% end %>
+
+        $(".bar-stats").attr("style", "height: "+$(".bar-legend").height()+"px")
+        $(".top-stats-panel").attr("style", "height: "+($(".daily-sales-info").height()+$(".bar-legend").height()+50)+"px")
+
+        $('.progress-stat-bar li').each(function () {
+          $(this).attr("style", "height: "+($(".bar-legend").height()-2)+"px")
+          $(this).find('.progress-stat-percent').animate({
+            height: $(this).attr('data-percent')
+          }, 1000);
+        });
+      <% end %>
+    </script>
+
+    <% if controller_name == "users" && (action_name == "create" || action_name == "update") %>
+      <script type="text/javascript">
+        <% if @user.present? %>
+          $("#myModal").modal('show')
+        <% end %>
+      </script>
+    <% end %>
+    
+    <% if controller_name == "surveys" && (action_name == "new") %>
+      <script type="text/javascript">
+        setTimeout("$('.default-date-picker').datepicker();", 1000)
+        $(document).ready(function(){
+          <% if session["#{current_user.id.to_s}"].present? %>
+
+            <% if session["#{current_user.id.to_s}"]['pages'].present? %>
+              $('#wizard-t-1').parent('li').removeClass('disabled').children('a').click()
+            <% end %>
+
+            <% if session["#{current_user.id.to_s}"]['logical'].present? %>
+              $('#wizard-t-1').parent('li').removeClass('disabled').children('a').click()
+              $('#wizard-t-2').parent('li').removeClass('disabled').children('a').click()
+            <% end %>
+
+            <% session["#{current_user.id.to_s}"]['pages'].each do |key, pages| %>
+              <% if pages['background'].present? || pages['color'].present? %>
+                $('#wizard-t-1').parent('li').removeClass('disabled').children('a').click()
+                $('#wizard-t-2').parent('li').removeClass('disabled').children('a').click()
+                $('#wizard-t-3').parent('li').removeClass('disabled').children('a').click()
+                <% break %>
+              <% end %>
+            <% end %>
+          <% end %>
+        });
+      </script>
+    <% end %>
+    <script type="text/javascript">
+      jQuery(document).ready(function() {
+        DraggablePortlet.init("<%= reorder_surveys_path %>");
+        
+        $("ul[role=tablist]").children("li").click(function(){
+          updateLogic()
+        })
+      });
+
+      <% if controller_name == "surveys" && action_name == "new" %>
+        $(document).ready(function(){        
+          set_slider()
+          set_datepicker_preview()
+          set_timepicker_preview()
+        })
+      <% end %>
+    </script>
+  </body>
+</html>

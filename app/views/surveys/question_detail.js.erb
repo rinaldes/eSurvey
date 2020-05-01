@@ -1,0 +1,12 @@
+<% if params[:position]=="head" %>
+$("#logical_content_wrapper").html("<%= j(render '/values/logical', id: params[:id], index: params[:index]) %>")
+$('html, body').animate({
+  scrollTop: $("#set-page-form").offset().top
+}, 2000);
+<% else %>
+$("#logical-new-wrapper").append("<%= j(render '/values/logical_form', id: params[:id], index: params[:index]) %>")
+$('html, body').animate({
+  scrollTop: $("#logical-new-wrapper").offset().top
+}, 2000);
+$("#add_new_question_button").attr("onclick", "get_logical_question(<%= params[:id] %>, 'detail', <%= params[:index].to_i+1 %>)")
+<% end %>

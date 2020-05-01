@@ -1,0 +1,3 @@
+$("#set-logical-form").html("")
+$("#close-logical-link").addClass("hide")
+$("#logical-preview").append("<%= j(render '/questions/logical', logical: params[:logical], id: params[:logical][:target]) %>")

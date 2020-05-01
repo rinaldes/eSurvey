@@ -1,0 +1,82 @@
+<% if @survey.present? && @all_responses > 0 %>
+  <div class="col-md-4">
+    <section class="panel">
+      <div class="panel-body">
+        <div class="top-stats-panel">
+          <h4 class="widget-h">Response Graphic</h4>
+          <div class="bar-stats">
+            <ul class="progress-stat-bar clearfix">
+              <% color_array = ["orange", "tar", "green", "pink", "yellow-b", "green"] %>
+              <% @survey.each_with_index do |survey, index| %>
+                <li data-percent="<%= survey.survey_responses.count==0 ? 0 : ((survey.survey_responses.count.to_f/@users_count.to_f)*100).ceil %>%"><span class="progress-stat-percent <%= color_array[index] %>"></span></li>
+              <% end %>
+            </ul>
+            <ul class="bar-legend">
+              <% @survey.each_with_index do |survey, index| %>
+                <li><span class="bar-legend-pointer <%= color_array[index] %>"></span> <%= survey.name[0..20] + (survey.name.length > 20 ? "..." : "") %></li>
+              <% end %>
+            </ul>
+            <div class="daily-sales-info">
+              <span class="sales-count"><%= @all_responses %> </span> <span class="sales-label">Responses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<% end %>
+
+<% if @all_one_year_responses > 0 && @one_year_responses > 0 %>
+  <div class="col-md-4">
+    <section class="panel">
+      <div class="panel-body">
+        <div class="top-stats-panel">
+          <h4 class="widget-h">Total Survey in 1 Year</h4>
+          <div class="sm-pie">
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<% end %>
+
+<% if @surveys.present? %>
+  <% index=0 %>
+  <% row=0 %>
+  <% @surveys.each do |survey| %>
+    <div class="col-md-<%= row%2==0 ? 4 : 3 %>">
+      <section class="panel">
+        <div class="panel-body">
+          <div class="top-stats-panel">
+            <h4 class="widget-h"><%= survey.name[0..(row%2==0 ? 27 : 17)] + (survey.name.length > (row%2==0 ? 27 : 17) ? "..." : "") %></h4>
+            <div class="bar-stats">
+              <ul class="progress-stat-bar clearfix">
+                <li data-percent="<%= survey.survey_responses.count==0 ? 0 : ((survey.survey_responses.count.to_f/@users_count.to_f)*100).ceil %>%"><span class="progress-stat-percent" style="background: #efb3e6;"></span></li>
+                <li data-percent="<%= survey.survey_responses.count==0 ? 0 : (((@users_count-survey.survey_responses.count).to_f/@users_count.to_f)*100).floor %>%"><span class="progress-stat-percent" style="background: #b2def7;"></span></li>
+              </ul>
+              <ul class="bar-legend">
+                <li><span class="bar-legend-pointer" style="background: #efb3e6;"></span> Response</li>
+                <li><span class="bar-legend-pointer" style="background: #b2def7;"></span> Unresponse</li>
+              </ul>
+              <div class="daily-sales-info">
+                <span class="sales-count"><%= survey.survey_responses.count %> </span> <span class="sales-label">Responses</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <%
+      row==0 ? row=1 : index+=1
+      max_index = row%2==0 ? 3 : 4
+      if index==max_index
+        index=0
+        row+=1
+      end
+    %>
+  <% end %>
+<% end %>
+
+<% unless (@all_one_year_responses > 0 && @one_year_responses > 0) || (@all_responses > 0 && @survey.present?) || @surveys.present? %>
+  <div class="col-md-12">No content here</div>
+<% end %>

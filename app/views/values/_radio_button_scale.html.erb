@@ -1,0 +1,39 @@
+<% id ||= 0 %>
+<% current_value = session[current_user.id.to_s]['question'][id.to_i] %>
+
+<% if current_value.present? %>
+	<% current_value["varians"]["option"].each do |index, option| %>
+		<%= render "/values/radio_button_scale_item", index: index, current_value: current_value, id: id %>
+	<% end %>
+<% else %>
+	<%= render "/values/radio_button_scale_item", index: 0, current_value: current_value, id: id %>
+<% end %>
+
+<div class='form-group' id="extra_panel">
+	<%= label_tag "question[varians][increment]", "Increment", class: "col-sm-2 control-label" %>
+	<div class='col-lg-3'>
+		<%= number_field_tag "question[varians][increment]", current_value.present? ? current_value['varians']['increment'] : "", class: "form-control", placeholder: "Increment", max: 20, min: 1, step: 1, onkeypress: "return event.charCode >= 48 && event.charCode <= 57" %>
+	</div>
+	<span class="help-block">Only allow even number, max 20</span>
+</div>
+
+<div class="extra panel box">
+	<div class="row">
+		<div class="col-sm-<%= id.to_i == 0 ? '1' : '2' %>" <%= "style=padding-right:0;" if id.to_i > 0 %>>
+			<%= button_tag "Done", type: "submit", class: "btn btn-primary" %>
+			<%= link_to "Cancel", edit_question_surveys_path(id: id, cancel: true), remote: true, class: "btn btn-primary" if id.to_i > 0 %>
+		</div>
+		<div class="col-sm-1<%= id.to_i == 0 ? '1' : '0' %>">
+			<div class="checkbox has-attachment">
+				<div class="checkbox-wrapper">
+					<%= check_box_tag "question[required]", 1, current_value.present? ? current_value['required'] : false %>
+					<%= label_tag :question_required, "Required" %>
+				</div>
+				<a href="#image" id="question_varians_image_link" onclick="show_dialog(this, 'image')">attach image</a>
+				<a href="#video" id="question_varians_video_link" onclick="show_dialog(this, 'video')">attach video</a>
+				<%= file_field_tag "question[varians][image]" %>
+				<%= file_field_tag "question[varians][video]" %>
+			</div>
+		</div>
+	</div>
+</div>

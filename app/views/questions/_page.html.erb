@@ -1,0 +1,58 @@
+<% exclude_action ||= false %>
+<% is_final ||= false %>
+<% set_enable ||= false %>
+<% is_background = is_background.present? ? is_background.to_s : 'false' %>
+<%
+	if is_final
+	  background = page['background'].gsub("public/","/") if page.present? && page['background'].present?
+	  set_background = (page['color'].present? ? "background: #{page['color']};" : (background.present? ? "background: url('#{background}') center center fixed; background-size: cover;" : ""))
+	else
+		set_background = ""
+	end
+%>
+<div class="set-preview col-sm-12 <%= 'draggable' unless is_background=='true' || is_final==true %>" id="<%= is_background=='true' ? 'background' : 'page' %>-preview-<%= id %>" style="<%= set_background %>">
+	<div class="set-preview-header <%= 'draggable-toucher' unless is_background=='true' || is_final %>">
+    <% unless exclude_action %>
+			<span>
+				<%= link_to '', preview_surveys_path(id), target: "_blank", :class => 'fa fa-eye' if is_background=='true' %>
+				<%= link_to '', edit_page_surveys_path(id: id, is_background: is_background), remote: true, :class => 'fa fa-pencil' %>
+				<%= link_to '', manage_page_surveys_path(:remove, id: id, is_background: is_background), remote: true, :class => 'fa fa-trash-o' %>
+			</span>
+    <% end %>
+
+    <% if set_enable %>
+			<span>
+				<%= check_box_tag "pages[is_enable][]", id, page['is_enable']=="true" ? true : false, id: "pages_is_enable_#{id}", onchange: "set_enable(this)", "data-id" => id %>
+				<%= label_tag "pages_is_enable_#{id}", "Enable", style: "font-weight:normal;" %>
+			</span>
+    <% end %>
+
+    <%= page['title'] %>
+
+		<% if is_background=='true' %>
+			<% unless exclude_action==true %>
+				<p class="set-tooltip exclude-margin"><%= page['description'] %></p>
+				
+				<% if page['color'].present? %>
+					<p class="set-tooltip"><%= page['color'] %></p>
+				<% end %>
+				<% if page['background'].present? %>
+					<p class="set-tooltip"><%= page['background'] %></p>
+				<% end %>
+			
+			<% else %>
+				<p class="set-tooltip"><%= page['description'] %></p>
+			
+			<% end %>
+		<% else %>
+			<p class="set-tooltip"><%= page['description'] %></p>
+		
+		<% end %>
+	</div>
+
+	<% unless is_background=='true' %>
+		<div class="set-preview-body page-preview draggable-wrapper" id="page_questions-<%= id %>">
+			<%= render "/questions/page_questions", page: page, id: id, exclude_action: exclude_action, is_background: is_background, is_final: is_final %>
+		</div>
+  <% end %>
+</div>

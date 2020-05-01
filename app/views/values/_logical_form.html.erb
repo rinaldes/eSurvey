@@ -1,0 +1,33 @@
+<% current_value = session[current_user.id.to_s]['logical'][id.to_i] %>
+
+<% id = current_value.present? ? id : params[:id] %>
+<% index = current_value.present? ? index : params[:index] %>
+
+<div class="logical_form clearfix">
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Answer</label>
+		<div class="col-sm-8">
+			<% base_options = session[current_user.id.to_s]['question'][id.to_i]['varians']['options'] %>
+			<%# session[current_user.id.to_s]['question'][id.to_i]['varians'] %>
+			<% if session[current_user.id.to_s]['question'][id.to_i]['type']=="dropdown" %>
+				<% options = base_options.split("\r\n") %>
+			<% else %>
+				<% options = base_options.map { |id, option| [option['label'], id] } %>
+			<% end %>
+			<%= select_tag "logical[varians][#{index}][answer]", options_for_select(options, current_value.present? ? current_value['varians'][index]['answer'] : ''), :prompt => "Select question type...", :class => "form-control" %>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Page</label>
+		<div class="col-sm-8">
+			<%= select_tag "logical[varians][#{index}][page]", options_for_select(session[current_user.id.to_s]['pages'].map { |id, pages| [pages['title'], id] }, current_value.present? ? current_value["varians"][index]["page"] : ''), :prompt => "Select question type...", :class => "form-control", :onchange => "question_page(this, #{index})" %>
+		</div>
+	</div>
+
+	<div class="form-group" id="logical_question_<%= index %>">
+	<% if current_value.present? %>
+		<%= render '/values/logical_question', id: id, index: index %>
+	<% end %>
+	</div>
+</div>

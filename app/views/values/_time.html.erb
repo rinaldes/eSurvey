@@ -1,0 +1,41 @@
+<% id ||= 0 %>
+<% current_value = session[current_user.id.to_s]['question'][id.to_i] %>
+<div class="form-group">
+	<div class="col-sm-10 col-sm-offset-2 checkbox">
+		<%= check_box_tag "question[varians][include_duration]", 1, current_value.present? ? current_value['varians']['include_duration'] : false, {onclick: "set_duration()"} %>
+		<%= label_tag :question_varians_include_duration, "Include Duration" %>
+	</div>
+</div>
+
+<div class="form-group time-pick" id="time_default">
+	<div class="col-sm-4 col-sm-offset-2">
+		<%= text_field_tag "question[answer]", current_value.present? ? current_value['answer'] : "", class: "form-control time-pick-control timepicker-24 time1", placeholder: "Time" %>
+	</div>
+</div>
+<div class="form-group time-pick" id="time_duration" style="display:none">
+	<div class="col-sm-4 col-sm-offset-2">
+		<%= text_field_tag "", current_value.present? ? current_value['answer'] : "", class: "form-control time-pick-control timepicker-24 time2", placeholder: "Time" %>
+	</div>
+</div>
+
+<div class="extra panel box">
+	<div class="row">
+		<div class="col-sm-<%= id.to_i == 0 ? '1' : '2' %>" <%= "style=padding-right:0;" if id.to_i > 0 %>>
+			<%= button_tag "Done", type: "submit", class: "btn btn-primary" %>
+			<%= link_to "Cancel", edit_question_surveys_path(id: id, cancel: true), remote: true, class: "btn btn-primary" if id.to_i > 0 %>
+		</div>
+		<div class="col-sm-1<%= id.to_i == 0 ? '1' : '0' %>">
+			<div class="checkbox has-attachment">
+				<div class="checkbox-wrapper">
+					<%= check_box_tag "question[required]", 1, current_value.present? ? current_value['required'] : false %>
+					<%= label_tag :question_required, "Required" %>
+				</div>
+				<a href="#image" id="question_varians_image_link" onclick="show_dialog(this, 'image')">attach image</a>
+				<a href="#video" id="question_varians_video_link" onclick="show_dialog(this, 'video')">attach video</a>
+				<%= file_field_tag "question[varians][image]" %>
+				<%= file_field_tag "question[varians][video]" %>
+				<%= hidden_field_tag "question[varians][set_default]", "true" %>
+			</div>
+		</div>
+	</div>
+</div>

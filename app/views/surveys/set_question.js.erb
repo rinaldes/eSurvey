@@ -1,0 +1,6 @@
+$("#set-question-form").html("")
+$("#close-question-link").addClass("hide")
+$("#question-preview").append("<%= j(render '/questions/index', question: params[:question], id: params[:question][:id], disabled: true) %>")
+set_slider()
+set_datepicker_preview()
+set_timepicker_preview()

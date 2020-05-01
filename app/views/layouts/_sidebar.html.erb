@@ -1,0 +1,40 @@
+<!--sidebar start-->
+<aside>
+  <div id="sidebar" class="nav-collapse">
+    <!-- sidebar menu start-->
+    <div class="leftside-navigation">
+      <ul class="sidebar-menu" id="nav-accordion">
+        <li>
+        	<%= link_to root_path, class: (controller_name == "dashboard" ? "active" : "") do %>
+            <i class="fa fa-dashboard"></i>
+            <span>Dashboard</span>
+          <% end %>
+        </li>
+        <% if current_user.role == "admin" %>
+          <li>
+          	<%= link_to users_path, class: (controller_name == "users" && action_name != "profile" ? "active" : "") do %>
+              <i class="fa fa-users"></i>
+              <span>User Management</span>
+            <% end %>
+          </li>
+        <% end %>
+        <li>
+        	<%= link_to surveys_path, class: (controller_name == "surveys" ? "active" : "") do %>
+            <i class="fa fa-bullhorn"></i>
+            <span>Survey</span>
+          <% end %>
+        </li>
+        <% if current_user.role == "admin" %>
+          <li>
+          	<%= link_to responses_path, class: (controller_name == "responses" ? "active" : "") do %>
+              <i class="fa fa-comments-o"></i>
+              <span>Response</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>        
+    <!-- sidebar menu end-->
+  </div>
+</aside>
+<!--sidebar end-->

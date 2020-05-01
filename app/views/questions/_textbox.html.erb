@@ -1,0 +1,17 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+	<input class="form-control" <%= "disabled" if disabled %> name="response[<%= question['id'] %>][textbox]" <%= "required" if question["required"].to_i==1 %> type="<%= question['varians']['validate'].present? ? question['varians']['type'] : 'text' %>" <%= "onkeypress='return event.charCode >= 48 && event.charCode <= 57'".html_safe if question['varians']['validate'].present? && question['varians']['type'] == "number" %> placeholder="Your question" value="<%= current_response[question['id'].to_s]['textbox'] if current_response[question['id'].to_s].present? %>">
+</div>

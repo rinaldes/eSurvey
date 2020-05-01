@@ -1,0 +1,25 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<div class="form-group half-size">
+  <input class="slider-selector" type="text" name="response[<%= question['id'] %>][percentage_scale]" value="0;100" data-type="single" data-step="<%= question['increment'] %>" data-postfix="" data-hasgrid="true" <%= "disabled" if disabled %> <%= "required" if question["required"].to_i==1 %> data-from="<%= current_response[question['id'].to_s].present? ? current_response[question['id'].to_s]['date'] : question['answer'] %>"/>
+	
+	<span class="pull-left">
+		<%= question['varians']['text_before'] %>
+	</span>
+
+	<span class="pull-right">
+		<%= question['varians']['text_after'] %>
+	</span>
+</div>

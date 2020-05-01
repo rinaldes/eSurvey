@@ -1,0 +1,24 @@
+<% current_value = session[current_user.id.to_s]['logical'][id.to_i] %>
+
+<% id = current_value.present? ? id : params[:id] %>
+<% index = current_value.present? ? index : params[:index] %>
+
+<div class="advance panel box">
+	<div class="advance-heading">
+		List Questions
+	</div>
+
+	<div class="advance-body" id="logical-new-wrapper">
+    <div class="clearfix has-button">
+      <div class="col-sm-12">
+        <%= link_to "Add New +", "#", id: "add_new_question_button", class: "btn btn-primary pull-right", onclick: "get_logical_question(#{id}, 'detail', #{index})" %>
+      </div>
+		</div>
+
+		<% if current_value.present? %>
+			<% current_value["varians"].each do |varians_index, varians| %>
+				<%= render '/values/logical_form', id: id, index: varians_index %>
+			<% end %>
+		<% end %>
+	</div>
+</div>

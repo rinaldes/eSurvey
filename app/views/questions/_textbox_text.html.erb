@@ -1,0 +1,33 @@
+<% current_response = session[current_user.id.to_s]['response'] %>
+
+<% if question['varians']["image"].present? %>
+	<div class="form-group half-size has-media">
+		<%= image_tag question['varians']["image"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<% if question['varians']["video"].present? %>
+	<div class="form-group half-size has-media">
+		<%= video_tag question['varians']["video"].gsub("public/","/") %>
+	</div>
+<% end %>
+
+<%
+	# answers = YAML::load(question['answer'])
+	answers = question['answer']
+	if answers.is_a?(String)
+		answers = eval(answers)
+	else
+		answers = answers
+	end
+%>
+
+<% answers.each do |index, answer| %>
+	<div class="form-group clearfix half-size">
+		<label class="col-sm-3 control-label"><%= question['varians']['text_before'][index] %></label>
+		<div class="col-sm-6">
+			<input class="form-control" <%= "disabled" if disabled %> name="response[<%= question['id'] %>][textbox_text][<%= index %>]" <%= "required" if question["required"].to_i==1 %> type="<%= question['varians']['validate'].present? ? question['varians']['type'] : 'text' %>" <%= "onkeypress='return event.charCode >= 48 && event.charCode <= 57'".html_safe if question['varians']['validate'].present? && question['varians']['type'] == "number" %> placeholder="Your question" value="<%= current_response[question['id'].to_s]['textbox_text'][index] if current_response[question['id'].to_s].present? %>">
+		</div>
+		<label class="col-sm-3 control-label text-left"><%= question['varians']['text_after'][index] %></label>
+	</div>
+<% end %>

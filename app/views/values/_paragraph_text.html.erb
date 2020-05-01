@@ -1,0 +1,61 @@
+<% id ||= 0 %>
+<% current_value = session[current_user.id.to_s]['question'][id.to_i] %>
+<div class="form-group">
+	<%= label_tag "question[answer]", "Answer", class: "col-sm-2 control-label" %>
+	<div class="col-sm-6">
+		<%= text_area_tag "question[answer]", current_value.present? ? current_value['answer'] : "", class: "form-control", placeholder: "Their answer" %>
+	</div>
+</div>
+
+<div class="advance panel box">
+	<div class="advance-heading">
+		<span class="tools">
+			<a href="javascript:;" class="fa fa-plus-square"></a>
+		</span>
+		Advanced Setting
+	</div>
+
+	<div class="advance-body" style="display: none;">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="checkbox">
+					<%= check_box_tag "question[varians][validate]", 1, current_value.present? ? current_value['varians']['validate'] : false %>
+					<%= label_tag :question_varians_validate, "Validation" %>
+				</div>
+			</div>
+
+			<div class="data-validation">
+				<div class="col-sm-2">
+					<%= select_tag "question[varians][type]", options_for_select([['Minimum Charecter Count', 'minimum'], ['Maximum Charecter Count', 'maximum']], current_value.present? ? current_value['varians']['type'] : '-'), :prompt => "Select validation type...", :class => "form-control" %>
+				</div>
+				<div class="col-sm-2">
+					<%= number_field_tag "question[varians][number]", current_value.present? ? current_value['varians']['number'] : "", class: "form-control", placeholder: "Number", onkeypress: "return event.charCode >= 48 && event.charCode <= 57" %>
+				</div>
+				<div class="col-sm-6">
+					<%= text_field_tag "question[varians][error]", current_value.present? ? current_value['varians']['error'] : "", class: "form-control", placeholder: "Custom error text" %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="extra panel box">
+	<div class="row">
+		<div class="col-sm-<%= id.to_i == 0 ? '1' : '2' %>" <%= "style=padding-right:0;" if id.to_i > 0 %>>
+			<%= button_tag "Done", type: "submit", class: "btn btn-primary" %>
+			<%= link_to "Cancel", edit_question_surveys_path(id: id, cancel: true), remote: true, class: "btn btn-primary" if id.to_i > 0 %>
+		</div>
+		<div class="col-sm-1<%= id.to_i == 0 ? '1' : '0' %>">
+			<div class="checkbox has-attachment">
+				<div class="checkbox-wrapper">
+					<%= check_box_tag "question[required]", 1, current_value.present? ? current_value['required'] : false %>
+					<%= label_tag :question_required, "Required" %>
+				</div>
+				<a href="#image" id="question_varians_image_link" onclick="show_dialog(this, 'image')">attach image</a>
+				<a href="#video" id="question_varians_video_link" onclick="show_dialog(this, 'video')">attach video</a>
+				<%= file_field_tag "question[varians][image]" %>
+				<%= file_field_tag "question[varians][video]" %>
+			</div>
+		</div>
+	</div>
+</div>

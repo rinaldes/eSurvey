@@ -1,0 +1,22 @@
+default: &default
+ adapter: postgresql
+ username: postgres
+ password: postgres123
+ host: localhost
+ encoding: UTF8
+ pool: 35
+
+development:
+ <<: *default
+ database: esurvey_development
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+ <<: *default
+ database: esurvey_test
+
+production:
+ <<: *default
+ database: esurvey_production

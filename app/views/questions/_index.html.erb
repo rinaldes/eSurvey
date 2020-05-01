@@ -1,0 +1,19 @@
+<% exclude_action ||= false %>
+<div class="set-preview col-sm-12 form-horizontal" id="question-preview-<%= id %>">
+	<div class="set-preview-header">
+    <%= question['title'] %>
+    <% unless exclude_action %>
+			<span>
+				<%= link_to '', edit_question_surveys_path(id: id), remote: true, :class => 'fa fa-pencil' %>
+				<%= link_to '', manage_question_surveys_path(:duplicate, id: id), remote: true, :class => 'fa fa-copy' %>
+				<%= link_to '', manage_question_surveys_path(:remove, id: id), remote: true, :class => 'fa fa-trash-o' %>
+			</span>
+		<% end %>
+	</div>
+
+	<div class="set-preview-body">
+		<p class="set-tooltip"><%= question['help'] %></p>
+		<%#= question %>
+		<%= render "/questions/" + (question['type'].present? ? question['type'] : question['question_type']), disabled: disabled, question: question.is_a?(Hash) ? question : question.as_json %>
+	</div>
+</div>

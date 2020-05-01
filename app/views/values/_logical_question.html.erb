@@ -1,0 +1,10 @@
+<% current_value = session[current_user.id.to_s]['logical'][id.to_i] %>
+
+<% id = current_value.present? ? current_value["varians"][index]["page"] : params[:id] %>
+<% index = current_value.present? ? index : params[:index] %>
+
+<label class="col-sm-2 control-label">Question</label>
+<div class="col-sm-8">
+	<% current_session = session[current_user.id.to_s] %>
+	<%= select_tag "logical[varians][#{index}][question]", options_for_select(current_session['pages'][id.to_i]['questions'].map { |id| [current_session['question'][id.to_i]['title'], id] }, current_value.present? ? current_value["varians"][index]["question"] : ''), :prompt => "Select question type...", :class => "form-control" %>
+</div>

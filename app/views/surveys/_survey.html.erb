@@ -1,0 +1,16 @@
+<tr id="survey_<%= survey.id %>">
+  <td><%= survey.is_user_response(current_user.id).present? ? survey.name : (link_to survey.name, survey, :target => "_blank") %></td>
+  <td><%= survey.period_start.strftime("%d %B %Y") %></td>
+  <td><%= survey.period_end.strftime("%d %B %Y") %></td>
+  <td><%= survey.survey_questions.count %></td>
+  <td><%= survey.survey_pages.count %></td>
+  <td><%= survey.status.capitalize %></td>
+  <td>
+    <% if survey.user_id == current_user.id %>
+      <%= link_to 'Delete', survey_path(survey), :confirm => 'Are you sure?', :method => :delete %>
+      <%= link_to survey.status=="open" ? "Close" : "Reopen", edit_survey_path(survey, cancel: false), remote: true %>
+    <% else %>
+      No action available
+    <% end %>
+  </td>
+</tr>
